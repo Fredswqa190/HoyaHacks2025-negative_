@@ -1,71 +1,83 @@
 .chat-container {
-    max-width: 400px; 
-    margin: 0;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.chat-header {
+    flex: 0 0 auto;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 .chat-history {
-    max-height: 200px; 
+    flex: 1 1 auto;
     overflow-y: auto;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .chat-message {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    color: black; /* Set text color to black */
 }
 
-.chat-message.user .message-text {
-    background-color: #007bff;
-    color: white;
-    align-self: flex-end;
+.chat-message.user {
+    justify-content: flex-end;
 }
 
-.chat-message.bot .message-text {
-    background-color: #e9ecef;
-    color: black;
-    align-self: flex-start;
+.chat-message.bot {
+    justify-content: flex-start;
 }
 
 .avatar {
     margin-right: 10px;
 }
 
-.loading, .error {
-    text-align: center;
-    margin-top: 10px;
-    color: red;
+.message-text {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #e0e0e0;
 }
 
 .chat-form {
+    flex: 0 0 auto;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
 }
 
 .chat-input {
+    flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    color: white; 
-    background-color: #333; 
+    border-radius: 4px;
+    margin-right: 10px;
 }
 
 .chat-submit {
-    padding: 10px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
-    background-color: #000000 !important; 
-    color: white !important; 
-    font-size: 16px;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
     cursor: pointer;
 }
 
-.chat-submit:hover {
-    background-color: #2f42ad !important; 
+.chat-submit:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.loading {
+    text-align: center;
+    color: #999;
+}
+
+.error {
+    text-align: center;
+    color: red;
 }

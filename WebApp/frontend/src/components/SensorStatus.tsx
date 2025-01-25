@@ -13,6 +13,7 @@ export default function SensorStatus() {
     const [Occupancy, setOccupancy] = useState(false);
     const [temp, setTemp] = useState(0);
     const [co2, setCO2] = useState(0);
+    const [voc, setVOC] = useState(0);
     const [soundlevel, setSound] = useState(0);
     const [pir, setpir] = useState(false);
 
@@ -28,6 +29,7 @@ export default function SensorStatus() {
         socket.on("sensor_data", (data) => {
             console.log("recieved sensor data")
             console.log(data)
+            setVOC(data.voc);
             setTemp(data.temperature);
             setCO2(data.co2);
             setSound(data.soundlevel);
@@ -54,6 +56,7 @@ export default function SensorStatus() {
             <StatusLabel label="Occupancy" value={Occupancy ? "Occupants detected" : "No occupants detected"} valueColor={Occupancy ? GREEN : RED}/>
             <StatusLabel label="Temperature" units="C" value={temp.toString()} valueColor={YELLOW}/>
             <StatusLabel label="CO2" units="PPM" value={co2.toString()} valueColor={YELLOW}/>
+            <StatusLabel label="VOC" units="PPB" value={voc.toString()} valueColor={YELLOW}/>
             <StatusLabel label="Sound Level" units="dB" value={soundlevel.toString()} valueColor={YELLOW}/>
             <StatusLabel label="Motion Detected" value={pir ? "Motion Detected" : "No motion detected"} valueColor={pir ? GREEN : RED}/>
         </Box>

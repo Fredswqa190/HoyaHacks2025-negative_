@@ -7,7 +7,7 @@ from inference import load_model
 import numpy as np
 import time
 import threading
-from wireshark import start_packet_capture, emit_packet_count
+from wireshark import capture_packets, emit_packet_count
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret!"
@@ -60,11 +60,13 @@ try:
 except Exception as e:
     print(f"Failed to connect to mqtt: {e}")
 
-capture_thread = threading.Thread(target=start_packet_capture, args=(socketio,))
-capture_thread.start()
-
-emit_thread = threading.Thread(target=emit_packet_count, args=(socketio,))
-emit_thread.start()
+thread = threading.Thread(target=emit_packet_count, args=(socketio,))
+thread.start()
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True, port=4003)
+    try:
+        socketio.run(app, debug=True, port=4003)
+    except KeyboardInterrupt:
+        print("Shutting down...")
+    finally:
+        thread.join()

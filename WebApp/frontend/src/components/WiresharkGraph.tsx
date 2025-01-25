@@ -15,7 +15,7 @@ const WiresharkGraph: React.FC = () => {
     const handlePacketCount = (packetCount: any) => {
       const currentTime = new Date().toLocaleTimeString();
       setData((prevData) => {
-        const newData = [...prevData, { time: currentTime, packets: packetCount.count }];
+        const newData = [...prevData, { time: currentTime, packets: packetCount }];
         if (newData.length > 10) {
           newData.shift();
         }
@@ -39,7 +39,7 @@ const WiresharkGraph: React.FC = () => {
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="time" />
-          <YAxis />
+          <YAxis dataKey="packets" />
           <Tooltip />
           <Legend />
           <Line type="monotone" dataKey="packets" stroke="#8884d8" activeDot={{ r: 8 }} />

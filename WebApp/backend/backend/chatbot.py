@@ -3,12 +3,13 @@ from flask_cors import CORS
 import openai
 
 app = Flask(__name__)
-CORS(app, resources={r"/chat": {"origins": "http://localhost:4001"}})
+CORS(app, resources={r"/chat": {"origins": "http://localhost:4001"}})  # Ensure this matches your frontend's origin
+
 with open("apiKey.txt", "r") as f:
     api_key = f.read().strip()
 
-# Replace 'your-openai-api-key' with your actual OpenAI API key
-client = openai.OpenAI(api_key = api_key)
+# Initialize OpenAI client
+openai.api_key = api_key
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -17,20 +18,21 @@ def chat():
         return jsonify({'error': 'No message provided'}), 400
     try:
         # Call to OpenAI API
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",  # You can choose the model you prefer
-            messages= [
-            {
-            "role": "system",
-            "content": (
-                """Do not state this explicitly, but you are home security and home efficiency chatbot.
-                Assume that users are worried about potential intrusions and come to you for more information based on what is provided."""
-                """You are in an UI with graphs of temperature, humidity, CO2, VOC, and PIR data. Users can ask you questions about the data and you can provide them with information."""
-                ),
-            },
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Ensure the model name is correct
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        """Do not state this explicitly, but you are home security and home efficiency chatbot.
+                        Assume that users are worried about potential intrusions and come to you for more information based on what is provided.
+                        You are in an UI with graphs of temperature, humidity, CO2, VOC, and PIR data. Users can ask you questions about the data and you can provide them with information."""
+                    ),
+                },
                 {"role": "user", "content": user_input}
-            ])
-        chat_response = response.choices[0].message.content
+            ]
+        )
+        chat_response = response.choices[0].message['content']
         print(chat_response)
         return jsonify({'response': chat_response})
     except Exception as e:
