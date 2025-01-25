@@ -1,0 +1,7 @@
+flask
+flask_socketio
+flask_cors
+paho_mqtt
+pytz
+tensorflow
+scikit-learn
