@@ -25,7 +25,7 @@ import traceback
 lib_dir = os.path.join(os.path.dirname(__file__), "lib")
 sys.path.append(lib_dir)
 
-import lib.pyshark as pyshark
+import pyshark
 
 # Get the value of the SPLUNK_HOME environment variable
 splunk_home = os.environ.get("SPLUNK_HOME")
