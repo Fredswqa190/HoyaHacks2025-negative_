@@ -1,3 +1,19 @@
+#include <math.h>
+
+const int B = 4275000;            // B value of the thermistor
+const int R0 = 100000;            // R0 = 100k
+const int pinTempSensor = 32;     // Grove - Temperature Sensor connect to 35
+
+const int pinSoundSensor = 35;
+
+#if defined(ARDUINO_ARCH_AVR)
+#define debug  Serial
+#elif defined(ARDUINO_ARCH_SAMD) ||  defined(ARDUINO_ARCH_SAM)
+#define debug  SerialUSB
+#else
+#define debug  Serial
+#endif
+
 //MQTT Client based on PubSubClient by Nick O'Leary 
 //CCS811 Device Library by DFRobot_CCS881
 //Communications and Networking libraries by espressif and Arduino
@@ -6,10 +22,11 @@
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 
-#include <WiFi.h>
+
 #include <PubSubClient.h>
 #include <DHT11.h>
 #include <CCS811.h>
+#include <WiFi.h>
 
 CCS811 CCS811;
 
@@ -19,7 +36,7 @@ CCS811 CCS811;
 
 const char* ssid = "mqttserver";
 const char* password = "";
-const char* mqtt_server = "192.168.97.182";
+const char* mqtt_server = "192.168.100.33";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -29,11 +46,13 @@ int value = 0;
 
 DHT11 dht11(33);
 int temperature = 0;
+float resistance = 0;
 int humidity = 0;
 float VOC = 0;
 float CO2 = 0;
 char tempString[8];
 char humString[8];
+char soundString[8];
 char VOCString[8];
 char CO2String[8];
 char PIRString[8];
@@ -85,15 +104,35 @@ void loop() {
     reconnect();
   }
 
-  int result = dht11.readTemperatureHumidity(temperature, humidity);
+  //int result = dht11.readTemperatureHumidity(temp, humidity);
+
+  int a = analogRead(pinTempSensor);
+
+  resistance=(float)(4095.0-a)*10000/a; //get the resistance of the sensor;
+  temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;//convert to temperature via datasheet ;
 
   dtostrf(temperature, 1, 2, tempString);
   Serial.print("Temperature: ");
   Serial.println(tempString);
   client.publish("esp32/temperature", tempString);
 
+  long sound = 0;
+    for(int i=0; i<32; i++)
+    {
+        sound += analogRead(pinSoundSensor);
+    }
+
+    sound >>= 5;
+
+  dtostrf(sound, 1, 2, soundString);
+  Serial.print("SoundLevel: ");
+  Serial.println(soundString);
+  client.publish("esp32/soundlevel", soundString);
+
+  humidity = 0;
+
   dtostrf(humidity, 1, 2, humString);
-  Serial.print("Temperature: ");
+  Serial.print("Humidity: ");
   Serial.println(humString);
   client.publish("esp32/humidity", humString);
   

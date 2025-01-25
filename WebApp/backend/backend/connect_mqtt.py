@@ -3,8 +3,8 @@ import datetime
 import threading
 from pytz import timezone
 
-MQTT_SERVER = "192.168.97.182"
-MQTT_FIELDS = ["temperature", "humidity", "VOC", "CO2", "PIR"]
+MQTT_SERVER = "192.168.100.33"
+MQTT_FIELDS = ["temperature", "soundlevel", "humidity", "VOC", "CO2", "PIR"]
 fields = MQTT_FIELDS.copy()
 fields.append("time")
 filename = "sensordata.csv"

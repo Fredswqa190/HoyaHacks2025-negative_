@@ -6,8 +6,8 @@ import torch
 from inference import load_model
 import numpy as np
 import time
-import pyshark
 import threading
+from wireshark import start_packet_capture, emit_packet_count
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret!"
@@ -16,12 +16,6 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 occupancy_model = load_model("best_weights.pth")
 OCCUPANCY_THRESHOLD = 0.5
-
-model = load_model("best_weights.pth")
-THRESHOLD = 0.5
-
-start = time.time()
-packet_count = 0
 
 def rand_float():
     return round(100 * abs(np.random.normal()), 3)
@@ -38,6 +32,7 @@ def handle_sensor_data(data):
         {
             "temperature": data["temperature"],
             "co2": data["CO2"],
+            "soundlevel": data["soundlevel"],
             "humidity": data["humidity"],
             "voc": data["VOC"],
             "pir": data["PIR"],
@@ -59,55 +54,17 @@ def occupancy_model_quantum(data):
     )
     return occupancy_model(data_arr)[0][0].item() > OCCUPANCY_THRESHOLD
 
-def handle_data_packet(data):
-    global packet_count
-    socketio.emit(
-        "wireshark_data",
-        {
-            "protocol": data["protocol"],
-            #"source": data["source"],
-            #"destination": data["destination"],
-            #"host": data.get("host"),
-            #"uri": data.get("uri"),
-        }
-    )
-    packet_count += 1
-    socketio.emit("packet_count", {"count": packet_count})
-
-    #dangerous = model_quantum(data)
-    socketio.emit("dangerous", True)
-
-def emit_packet_count():
-    global packet_count
-    while True:
-        time.sleep(10)
-        socketio.emit("packet_count", {"count": packet_count})
-        packet_count = 0
-
-threading.Thread(target=emit_packet_count).start()
-
-def start_packet_capture():
-    try:
-        interface = 'Ethernet'
-        capture = pyshark.LiveCapture(interface=interface)
-        print(f"Starting live capture on interface {interface}...")
-        for packet in capture.sniff_continuously():
-            protocol = packet.transport_layer
-            data = {
-                "protocol": protocol,
-            }
-            handle_data_packet(data)
-    except Exception as e:
-        print(f"Failed to start live capture: {e}")
-
-capture_thread = threading.Thread(target=start_packet_capture)
-capture_thread.start()
-
 try:
     print("Connecting to mqtt...")
     connect_mqtt(handle_data=handle_sensor_data)
 except Exception as e:
     print(f"Failed to connect to mqtt: {e}")
+
+capture_thread = threading.Thread(target=start_packet_capture, args=(socketio,))
+capture_thread.start()
+
+emit_thread = threading.Thread(target=emit_packet_count, args=(socketio,))
+emit_thread.start()
 
 if __name__ == "__main__":
     socketio.run(app, debug=True, port=4003)

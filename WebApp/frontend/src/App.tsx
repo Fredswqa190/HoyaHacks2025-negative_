@@ -87,7 +87,7 @@ export default function App() {
                   <LiveChart title="CO2" dataKey="co2"/>
                 </Grid >
                 <Grid marginTop="2em" container columns={2} direction="row" >
-                  <LiveChart title="Humidity" dataKey="humidity"/>
+                  <LiveChart title="Sound Level" dataKey="soundlevel"/>
                   <LiveChart title="Volatile Organic Compounds" dataKey="voc"/>
                 </Grid >
               </Grid>

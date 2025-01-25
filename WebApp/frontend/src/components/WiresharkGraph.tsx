@@ -14,10 +14,13 @@ const WiresharkGraph: React.FC = () => {
   useEffect(() => {
     const handlePacketCount = (packetCount: any) => {
       const currentTime = new Date().toLocaleTimeString();
-      setData((prevData) => [
-        ...prevData,
-        { time: currentTime, packets: packetCount.count },
-      ]);
+      setData((prevData) => {
+        const newData = [...prevData, { time: currentTime, packets: packetCount.count }];
+        if (newData.length > 10) {
+          newData.shift();
+        }
+        return newData;
+      });
     };
 
     socket.on('packet_count', handlePacketCount);

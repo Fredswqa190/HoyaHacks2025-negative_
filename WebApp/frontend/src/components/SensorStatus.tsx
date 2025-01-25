@@ -13,7 +13,7 @@ export default function SensorStatus() {
     const [Occupancy, setOccupancy] = useState(false);
     const [temp, setTemp] = useState(0);
     const [co2, setCO2] = useState(0);
-    const [humidity, setHumidity] = useState(0);
+    const [soundlevel, setSound] = useState(0);
     const [pir, setpir] = useState(false);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function SensorStatus() {
             console.log(data)
             setTemp(data.temperature);
             setCO2(data.co2);
-            setHumidity(data.humidity);
+            setSound(data.soundlevel);
             setpir(data.pir);
         });
 
@@ -54,7 +54,7 @@ export default function SensorStatus() {
             <StatusLabel label="Occupancy" value={Occupancy ? "Occupants detected" : "No occupants detected"} valueColor={Occupancy ? GREEN : RED}/>
             <StatusLabel label="Temperature" units="C" value={temp.toString()} valueColor={YELLOW}/>
             <StatusLabel label="CO2" units="PPM" value={co2.toString()} valueColor={YELLOW}/>
-            <StatusLabel label="Humidity" units="g/kg" value={humidity.toString()} valueColor={YELLOW}/>
+            <StatusLabel label="Sound Level" units="dB" value={soundlevel.toString()} valueColor={YELLOW}/>
             <StatusLabel label="Motion Detected" value={pir ? "Motion Detected" : "No motion detected"} valueColor={pir ? GREEN : RED}/>
         </Box>
     )
