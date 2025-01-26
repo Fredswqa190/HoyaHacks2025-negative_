@@ -90,7 +90,8 @@ export default function App() {
               </Paper>
             </Container>
 
-            <Container sx={{ marginBottom: '2em' }}>
+            <Container sx={{ marginTop: '2em', marginBottom: '2em' }}>
+            <Paper elevation={3} sx={{ padding: '20px', marginBottom: '2em' }}>
               <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
                 Live Sensor Data
               </Typography>
@@ -115,6 +116,7 @@ export default function App() {
                   </Grid>
                 </Grid>
               </Grid>
+              </Paper>
             </Container>
           </Box>
         </ThemeProvider>

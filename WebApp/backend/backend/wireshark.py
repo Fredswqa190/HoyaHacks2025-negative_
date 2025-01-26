@@ -9,7 +9,7 @@ def capture_packets():
     interface = "Wi-Fi"
     capture = pyshark.LiveCapture(interface=interface)
     capture.sniff(timeout=5)
-    print(len(capture))
+    #print(len(capture))
     return(len(capture))
 
 def emit_packet_count(socketio):

@@ -44,7 +44,8 @@ const Chatbot: React.FC = () => {
     return (
         <div className="chat-container" style={{ backgroundColor: theme.palette.mode === 'dark' ? '#333' : '#f9f9f9' }}>
             <div className="chat-header">
-                <h1>Chat with Sentinel</h1>
+                <h1>Sentinel Tiger</h1>
+                <h2>Chat</h2>
             </div>
             <div className="chat-history">
                 {chatHistory.map((message, index) => (
