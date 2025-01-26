@@ -2,13 +2,23 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, IconButton, Menu, MenuItem } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import CssBaseline from '@mui/material/CssBaseline';
 import ColorModeContext from './contexts/ColorModeContext';
+import ToggleColorMode from './components/ToggleColorMode';
 
 export default function Home() {
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
   const [isClient, setIsClient] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -38,6 +48,23 @@ export default function Home() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: "100vh", paddingRight: "40px", backgroundColor: theme.palette.background.default }}>
+        <Box sx={{ position: 'relative', zIndex: 1000, padding: '10px' }}>
+            <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleMenuOpen}>
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={handleMenuClose}>
+              <a href="https://github.com/Fredswqa190/HoyaHacks2025-negative_" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+                Download
+              </a>
+              </MenuItem>
+            </Menu>
+          <ToggleColorMode />
+        </Box>
           <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" sx={{ paddingTop: '20px', position: 'sticky', top: 0, backgroundColor: theme.palette.background.default }}>
             <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
               negative{isClient && <span style={{ animation: 'blink 1s step-end infinite' }}>_</span>}
