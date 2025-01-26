@@ -1,11 +1,10 @@
 'use client'
 
-import { createContext, useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box, Grid, Typography } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-
-const ColorModeContext = createContext({ toggleColorMode: () => {} });
+import ColorModeContext from './contexts/ColorModeContext';
 
 export default function Home() {
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
