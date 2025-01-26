@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box, Grid, Typography } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 
-export const ColorModeContext = createContext({ toggleColorMode: () => {} });
+const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 export default function Home() {
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
