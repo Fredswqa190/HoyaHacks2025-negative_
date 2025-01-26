@@ -1,8 +1,7 @@
 'use client'
 
-import Image from "next/image";
 import ToggleColorMode from './components/ToggleColorMode';
-import { createContext, useMemo, useState, useContext } from "react"
+import { createContext, useMemo, useState } from "react"
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box, Grid, Typography, Menu, MenuItem, IconButton } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
